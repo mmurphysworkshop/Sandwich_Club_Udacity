@@ -3,7 +3,10 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -43,7 +46,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        populateUI();
+        populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
                 .into(ingredientsIv);
@@ -56,7 +59,23 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI() {
+    private void populateUI(Sandwich sandwich) {
+        TextView origin_tv = findViewById(R.id.origin_tv);
+        TextView also_known_tv = findViewById(R.id.also_known_tv);
+        LinearLayout also_known_ll = findViewById(R.id.also_known_ll);
+        
+        origin_tv.setText(sandwich.getPlaceOfOrigin());
 
+        if(!sandwich.getAlsoKnownAs().isEmpty()){
+//            TODO figure out how to completely hide views so other views can scroll up
+            also_known_ll.setVisibility(View.VISIBLE);
+//            TODO make the list of AKAs prettier
+            for(String alsoKnownAsString: sandwich.getAlsoKnownAs()){
+                also_known_tv.append(alsoKnownAsString);
+            }
+        }
+        else {
+            also_known_ll.setVisibility(View.INVISIBLE);
+        }
     }
 }
