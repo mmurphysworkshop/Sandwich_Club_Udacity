@@ -21,21 +21,22 @@ public class JsonUtils {
             if(sandwichJson != null){
 //                Setting the strings of the Sandwich Object
                 Sandwich sandwich = new Sandwich();
-//                TODO must drill into name list to get mainname and alsoknownas list
-                Log.d("SANDWICHCLUBDEBUG", "Assemble the Sandwich");
-                Log.d("SANDWICHCLUBDEBUG", json);
-                sandwich.setMainName(sandwichJson.getString("mainName"));
                 sandwich.setPlaceOfOrigin(sandwichJson.getString("placeOfOrigin"));
                 sandwich.setDescription(sandwichJson.getString("description"));
                 sandwich.setImage(sandwichJson.getString("image"));
 
-//                Using our helper method to populate the List fields for our Sandwich
-                JSONArray tempJSONArray = sandwichJson.getJSONArray("ingredients");
+//                mainName and alsoKnownAs are bundled in a JSONObject known
+//                as name. Drill down through name to get them.
+                JSONObject tempJSONObject = sandwichJson.getJSONObject("name");
+                sandwich.setMainName(tempJSONObject.getString("mainName"));
+                JSONArray tempJSONArray = tempJSONObject.getJSONArray("alsoKnownAs");
                 List<String> tempList = new ArrayList<String>(getListFromJSON(tempJSONArray));
-                sandwich.setIngredients(tempList);
-                tempJSONArray = sandwichJson.getJSONArray("alsoKnownAs");
-                tempList = new ArrayList<String>(getListFromJSON(tempJSONArray));
                 sandwich.setAlsoKnownAs(tempList);
+
+//                Ingredients is just a list in the base JSONObject
+                tempJSONArray = sandwichJson.getJSONArray("ingredients");
+                tempList = new ArrayList<String>(getListFromJSON(tempJSONArray));
+                sandwich.setIngredients(tempList);
 
 //                Our sandwich is assembled, time to return it
                 return sandwich;
