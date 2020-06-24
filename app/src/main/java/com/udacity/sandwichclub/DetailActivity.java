@@ -78,18 +78,17 @@ public class DetailActivity extends AppCompatActivity {
         populateTextViews(ingredients_ll, ingredients_tv, sandwich.getIngredients().toArray(new String[sandwich.getIngredients().size()]));
     }
 
+//    method to populate textViews and if there is not data to populate it hides the linear layout
+//    the text view is a part of.
     private void populateTextViews(LinearLayout layoutWrapper, TextView viewToPopulate, String... args) {
-        if(args == null)
-            Log.d(SANDWICH__CLUB, "populateTextViews: null" );
-        else if(args.length == 0)
-            Log.d(SANDWICH__CLUB, "populateTextViews: 0" );
-        else
-            Log.d(SANDWICH__CLUB, "populateTextViews: " + args.length);
+
         if(args == null || args.length == 0){
             layoutWrapper.setVisibility(View.GONE);
             return;
         }
         else{
+//            I found that the Lists needed to be checked if they were empty but that did not
+//            account for if the country of origin is blank
             if(args[0].equals("")) {
                 layoutWrapper.setVisibility(View.GONE);
                 return;
