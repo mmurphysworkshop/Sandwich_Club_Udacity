@@ -3,6 +3,7 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +16,7 @@ import com.udacity.sandwichclub.utils.JsonUtils;
 
 public class DetailActivity extends AppCompatActivity {
 
+    private static final String SANDWICH__CLUB = "Sandwich_Club";
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
 
@@ -62,9 +64,19 @@ public class DetailActivity extends AppCompatActivity {
     private void populateUI(Sandwich sandwich) {
         TextView origin_tv = findViewById(R.id.origin_tv);
         TextView also_known_tv = findViewById(R.id.also_known_tv);
+        TextView description_tv = findViewById(R.id.description_tv);
+        TextView ingredients_tv = findViewById(R.id.ingredients_tv);
+
         LinearLayout also_known_ll = findViewById(R.id.also_known_ll);
-        
-        origin_tv.setText(sandwich.getPlaceOfOrigin());
+        LinearLayout origin_ll = findViewById(R.id.origin_ll);
+        LinearLayout description_ll = findViewById(R.id.description_ll);
+        LinearLayout ingredients_ll = findViewById(R.id.ingredients_ll);
+
+        populateTextViews(also_known_ll, also_known_tv, sandwich.getAlsoKnownAs().toArray(new String[sandwich.getAlsoKnownAs().size()]));
+        populateTextViews(origin_ll, origin_tv, sandwich.getPlaceOfOrigin());
+        populateTextViews(description_ll, description_tv, sandwich.getDescription());
+        populateTextViews(ingredients_ll, ingredients_tv, sandwich.getIngredients().toArray(new String[sandwich.getIngredients().size()]));
+       /* origin_tv.setText(sandwich.getPlaceOfOrigin());
 
         if(!sandwich.getAlsoKnownAs().isEmpty()){
 //            TODO figure out how to completely hide views so other views can scroll up
@@ -75,7 +87,33 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
         else {
-            also_known_ll.setVisibility(View.INVISIBLE);
+            also_known_ll.setVisibility(View.GONE);
+        }*/
+    }
+    private void populateTextViews(LinearLayout layoutWrapper, TextView viewToPopulate, String... args) {
+        if(args == null)
+            Log.d(SANDWICH__CLUB, "populateTextViews: null" );
+        else if(args.length == 0)
+            Log.d(SANDWICH__CLUB, "populateTextViews: 0" );
+        else
+            Log.d(SANDWICH__CLUB, "populateTextViews: " + args.length);
+        if(args == null || args.length == 0){
+            layoutWrapper.setVisibility(View.GONE);
+            return;
+        }
+        else{
+            if(args[0].equals("")) {
+                layoutWrapper.setVisibility(View.GONE);
+                return;
+            }
+            layoutWrapper.setVisibility(View.VISIBLE);
+            String delim = "";
+            for(String string: args){
+                viewToPopulate.append(delim + " " + string);
+                delim = ",";
+            }
         }
     }
 }
+
+
