@@ -76,20 +76,8 @@ public class DetailActivity extends AppCompatActivity {
         populateTextViews(origin_ll, origin_tv, sandwich.getPlaceOfOrigin());
         populateTextViews(description_ll, description_tv, sandwich.getDescription());
         populateTextViews(ingredients_ll, ingredients_tv, sandwich.getIngredients().toArray(new String[sandwich.getIngredients().size()]));
-       /* origin_tv.setText(sandwich.getPlaceOfOrigin());
-
-        if(!sandwich.getAlsoKnownAs().isEmpty()){
-//            TODO figure out how to completely hide views so other views can scroll up
-            also_known_ll.setVisibility(View.VISIBLE);
-//            TODO make the list of AKAs prettier
-            for(String alsoKnownAsString: sandwich.getAlsoKnownAs()){
-                also_known_tv.append(alsoKnownAsString);
-            }
-        }
-        else {
-            also_known_ll.setVisibility(View.GONE);
-        }*/
     }
+
     private void populateTextViews(LinearLayout layoutWrapper, TextView viewToPopulate, String... args) {
         if(args == null)
             Log.d(SANDWICH__CLUB, "populateTextViews: null" );
