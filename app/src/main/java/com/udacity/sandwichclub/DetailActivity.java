@@ -3,6 +3,7 @@ package com.udacity.sandwichclub;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -51,6 +52,8 @@ public class DetailActivity extends AppCompatActivity {
         populateUI(sandwich);
         Picasso.with(this)
                 .load(sandwich.getImage())
+                .placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher_round)
                 .into(ingredientsIv);
 
         setTitle(sandwich.getMainName());
@@ -94,11 +97,8 @@ public class DetailActivity extends AppCompatActivity {
                 return;
             }
             layoutWrapper.setVisibility(View.VISIBLE);
-            String delim = "";
-            for(String string: args){
-                viewToPopulate.append(delim + " " + string);
-                delim = ",";
-            }
+            String delim = ", ";
+            viewToPopulate.append(TextUtils.join(delim, args));
         }
     }
 }

@@ -13,7 +13,15 @@ import java.util.List;
 
 public class JsonUtils {
 
-//     The method to parse the JSON data for the selected Sandwich
+    public static final String JSON_NAME_KEY = "name";
+    public static final String JSON_MAIN_NAME_KEY = "mainName";
+    public static final String JSON_ORIGIN_KEY = "placeOfOrigin";
+    public static final String JSON_DESCRIPTION_KEY = "description";
+    public static final String JSON_IMAGE_KEY = "image";
+    public static final String JSON_AKA_KEY = "alsoKnownAs";
+    public static final String JSON_INGREDIENTS_KEY = "ingredients";
+
+    //     The method to parse the JSON data for the selected Sandwich
     public static Sandwich parseSandwichJson(String json) {
         JSONObject sandwichJson = null;
         try{
@@ -21,20 +29,20 @@ public class JsonUtils {
             if(sandwichJson != null){
 //                Setting the strings of the Sandwich Object
                 Sandwich sandwich = new Sandwich();
-                sandwich.setPlaceOfOrigin(sandwichJson.getString("placeOfOrigin"));
-                sandwich.setDescription(sandwichJson.getString("description"));
-                sandwich.setImage(sandwichJson.getString("image"));
+                sandwich.setPlaceOfOrigin(sandwichJson.optString(JSON_ORIGIN_KEY));
+                sandwich.setDescription(sandwichJson.optString(JSON_DESCRIPTION_KEY));
+                sandwich.setImage(sandwichJson.optString(JSON_IMAGE_KEY));
 
 //                mainName and alsoKnownAs are bundled in a JSONObject known
 //                as name. Drill down through name to get them.
-                JSONObject tempJSONObject = sandwichJson.getJSONObject("name");
-                sandwich.setMainName(tempJSONObject.getString("mainName"));
-                JSONArray tempJSONArray = tempJSONObject.getJSONArray("alsoKnownAs");
+                JSONObject tempJSONObject = sandwichJson.getJSONObject(JSON_NAME_KEY);
+                sandwich.setMainName(tempJSONObject.optString(JSON_MAIN_NAME_KEY));
+                JSONArray tempJSONArray = tempJSONObject.getJSONArray(JSON_AKA_KEY);
                 List<String> tempList = new ArrayList<String>(getListFromJSON(tempJSONArray));
                 sandwich.setAlsoKnownAs(tempList);
 
 //                Ingredients is just a list in the base JSONObject
-                tempJSONArray = sandwichJson.getJSONArray("ingredients");
+                tempJSONArray = sandwichJson.getJSONArray(JSON_INGREDIENTS_KEY);
                 tempList = new ArrayList<String>(getListFromJSON(tempJSONArray));
                 sandwich.setIngredients(tempList);
 
@@ -50,13 +58,8 @@ public class JsonUtils {
 //  Helper method for getting a List of Strings from a JSONArray
     public static List<String> getListFromJSON(JSONArray tempJSONArray){
         List<String> tempList = new ArrayList<String>();
-        try{
             for(int i = 0; i < tempJSONArray.length(); i++)
-                tempList.add(tempJSONArray.getString(i));
-        } catch(JSONException e){
-            e.printStackTrace();
-            return null;
-        }
+                tempList.add(tempJSONArray.optString(i));
         return tempList;
     }
 }
